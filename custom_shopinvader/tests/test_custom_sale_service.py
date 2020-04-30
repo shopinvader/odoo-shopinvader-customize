@@ -30,3 +30,14 @@ class CustomSaleServiceTest(CommonCase):
         # The result should include my custom_field
         self.assertIn("custom_field", api_response)
         self.assertEqual(api_response["custom_field"], "foo")
+
+    def test_action_on_sale_order(self):
+        # I take a sale order that belong to the partner shopinvader.partner_1
+        sale = self.env.ref("shopinvader.sale_order_2")
+
+        # Note as this sale is not yet confirm (it's still a cart I confirm it)
+        sale.action_confirm_cart()
+
+        self.sale_service.dispatch("custom_action", sale.id, params={})
+
+        self.assertEqual(sale.custom_action_done, True)
