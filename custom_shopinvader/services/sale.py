@@ -12,3 +12,11 @@ class SaleService(Component):
         res = super()._convert_one_sale(sale)
         res["custom_field"] = sale.custom_field
         return res
+
+    def custom_action(self, _id, **params):
+        order = self._get(_id)
+        order.write({"custom_action_done": True})
+        return {}
+
+    def _validator_custom_action(self):
+        return {"custom_action_params": {"type": "string"}}
